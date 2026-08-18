@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 1. Update the title below -->
+<title>Gameweek X — FPL Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch-purple:#37003c;
+    --pitch-purple-2:#4d0a56;
+    --pitch-purple-3:#5e1268;
+    --pitch-green:#00ff85;
+    --pitch-cyan:#04f5ff;
+    --ink:#f4eef7;
+    --ink-dim:#c6b3cf;
+    --ink-faint:#8d7797;
+    --line:rgba(255,255,255,0.12);
+    --danger:#ff5c72;
+    --gold:#e8c15a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--pitch-purple);
+    background-image:
+      radial-gradient(circle at 15% 0%, var(--pitch-purple-3) 0%, transparent 55%),
+      radial-gradient(circle at 100% 30%, var(--pitch-purple-2) 0%, transparent 45%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+
+  /* top nav */
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:32px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .nav-brand span{color:var(--pitch-green);}
+  .nav-right{display:flex;gap:10px;align-items:center;}
+  .nav-link{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:9px 15px;
+    border-radius:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav-link.primary{
+    color:var(--pitch-purple);
+    background:var(--pitch-green);
+  }
+  .nav-link.primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(0,255,133,0.25);
+  }
+  .nav-link.ghost{
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+  }
+  .nav-link.ghost:hover{
+    color:var(--ink);
+    border-color:rgba(255,255,255,0.3);
+  }
+  .nav-link svg{width:13px;height:13px;}
+
+  /* post meta + title */
+  .post-meta{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    margin-bottom:10px;
+  }
+  .post-meta .dot{color:var(--ink-faint);}
+  .post-meta .date{color:var(--ink-faint);text-transform:none;letter-spacing:0;font-weight:500;}
+  h1{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:32px;
+    letter-spacing:0.3px;
+    margin:0 0 22px;
+    line-height:1.15;
+  }
+  h1 span{color:var(--pitch-green);}
+
+  /* article body */
+  article{font-size:15.5px;line-height:1.7;color:var(--ink-dim);}
+  article h2{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:0.3px;
+    color:var(--ink);
+    text-transform:uppercase;
+    margin:32px 0 12px;
+  }
+  article p{margin:0 0 16px;}
+  article strong{color:var(--ink);}
+  article a{color:var(--pitch-green);}
+
+  /* stat pills — for quick GW numbers */
+  .stat-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 28px;}
+  .stat-pill{
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 16px;
+    min-width:110px;
+  }
+  .stat-pill .label{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:3px;
+  }
+  .stat-pill .value{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--pitch-green);
+  }
+
+  /* pull quote / callout for a manager's move */
+  .callout{
+    border-left:3px solid var(--pitch-green);
+    background:rgba(0,255,133,0.06);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:22px 0;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .callout .who{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .footer-nav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:44px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.3px;
+    text-transform:uppercase;
+  }
+  .footer-nav a{color:var(--ink-dim);text-decoration:none;}
+  .footer-nav a:hover{color:var(--pitch-green);}
+
+  @media (max-width:600px){
+    h1{font-size:24px;}
+    .nav-link span.label{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <a class="nav-brand" href="../index.html">FPL <span>Tracker</span></a>
+    <div class="nav-right">
+      <a class="nav-link ghost" href="../index.html"><span class="label">All posts</span></a>
+      <a class="nav-link primary" href="../fpl_tracker_dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8 12 14.7l-3.5-3.5L3 16.5"/></svg>
+        <span class="label">Live tracker</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. Update meta: gameweek number and the date you're publishing -->
+  <div class="post-meta">
+    <span>Gameweek 0</span>
+    <span class="dot">&bull;</span>
+    <span class="date">August 08, 2026</span>
+  </div>
+
+  <!-- 3. Update the headline -->
+  <h1>Gameweek 0: <span>Initial Setup and Plan</span></h1>
+
+  <!-- 4. Optional: quick stat pills for the week — duplicate/remove as needed -->
+
+  <!-- 5. Write the post body below. Duplicate <h2>/<p> blocks as needed. -->
+  <article>
+    <p>So I've always been into Fantasy Premier League and each year I kind of lose interest part way through, injuries mount and I kind of think to myself "what is the point in this".</p>
+    <p>This year I've decided to turn it into an experiment. I have setup 3 teams and for each of the 3 teams we will be allowing a different AI asisstant to manage each of the team decisions.</p>
+    <p>The 3 I've chosen are Claude, ChatGPT and Copilot. Why these 3? I use Claude on the daily so am fairly familiar with it. Most people are aware of ChatGPT and the Premier League is sponsored by Copilot so thought it'd be be good to include.</p>
+    <p>"Why didn't you pick X AI asisstant it's the best". Time mostly and I had to find a limiting factor and chose these 3 for the reasons above.</p>
+    
+    <H2>The plan</H2>
+    <p>So I gave each 3 of the AI asisstants the same prompt in a project which is listed below. I then had to in some ways "fix" the team it seleted for me on each one. Which I will detail in each section pertaining to that AI. At the end of each gameweek I will be updating this blog and detailing any issues I experience with their usage and such.</p> 
+
+    <h2>The prompt</H2>
+    <p>As stated above to make it fair each asisstant got the following prompt initially:</p>
+    <p>I am going to be using "AINAME" to make all my fantasy premier league decisions this year. We’re going to start by making the team. I need you to make me a team then based on that each week we will be making the allowed substitutions and such based on the current teams within the premier league.</p>
+    <p>And here are the teams which they produced and any issues I hit with each one.</p>
+
+
+    <h2>Claude</h2>
+    <p>After giving Claude the prompt it produced me an MD file. Which was nice but not necessarily what I was after. It took a few tries as it kept insisting that Wolves were still in the premiership and suggesting players which had moved on.
+      However after all of that. I got the following team.
+    </p>
+  <table>
+    <caption class="visually-hidden-caption" hidden>Claude squad</caption>
+    <thead>
+      <tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Club</th><th scope="col">Price</th><th scope="col">Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="pos">GK</td><td>Raya</td><td>Arsenal</td><td class="price">£6.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">GK</td><td>Kinsky</td><td>Tottenham</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">DEF</td><td>N. Williams</td><td>Nottm Forest</td><td class="price">£5.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Van Dijk</td><td>Liverpool</td><td class="price">£6.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Maguire</td><td>Man Utd</td><td class="price">£5.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Van Ewijk</td><td>Coventry</td><td class="price">£4.0m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">DEF</td><td>Hume</td><td>Brighton</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">MID</td><td>Yates</td><td>Nottm Forest</td><td class="price">£4.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>B. Fernandes</td><td>Man Utd</td><td class="price">£12.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Szoboszlai</td><td>Liverpool</td><td class="price">£7.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Gro&szlig;</td><td>Brighton</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Gomez</td><td>Brighton</td><td class="price">£5.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Haaland</td><td>Man City</td><td class="price">£15.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Isak</td><td>Liverpool</td><td class="price">£9.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Igor Jesus</td><td>Nottm Forest</td><td class="price">£6.0m</td><td class="bench">Bench</td></tr>
+    </tbody>
+  </table>
+    <!-- Optional callout to highlight a notable move or quote -->
+    <!--<div class="callout">
+      <span class="who">Claude's reasoning</span>
+      Drop in a short note on why a transfer or captain pick was made, if worth calling out.
+    </div>-->
+
+    <h2>ChatGPT</h2>
+    <p>ChatGPT was the least work to get initially going. However it did initially put me at 0.5m over budget but when told this it corrected itself with no issues. After all that it produced the following team</p>
+      <table>
+    <thead>
+      <tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Club</th><th scope="col">Price</th><th scope="col">Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="pos">GK</td><td>Kinsky</td><td>Tottenham</td><td class="price">£4.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">GK</td><td>D&uacute;bravka</td><td>Tottenham</td><td class="price">£4.0m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">DEF</td><td>Gabriel</td><td>Arsenal</td><td class="price">£8.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Maguire</td><td>Man Utd</td><td class="price">£5.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Mosquera</td><td>Arsenal</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Hincapi&eacute;</td><td>Liverpool</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Greaves</td><td>Ipswich</td><td class="price">£4.0m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">MID</td><td>B. Fernandes</td><td>Man Utd</td><td class="price">£12.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Mbeumo</td><td>Man Utd</td><td class="price">£8.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Stach</td><td>Leeds</td><td class="price">£6.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Xhaka</td><td>Sunderland</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Slater</td><td>Hull</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">FWD</td><td>Haaland</td><td>Man City</td><td class="price">£15.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Jo&atilde;o Pedro</td><td>Chelsea</td><td class="price">£7.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Kusi-Asare</td><td>Fulham</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+    </tbody>
+  </table>
+
+    <h2>Copilot</h2>
+    <p>Finally Copilot. I wrongly assumed that because they were a sponsor of the Premier League that they'd have direct access to the FPL data. I was sorely mistaken and realised when I was initially over budget by 8.5m, when I attempted to correct the asisstantit
+      it essentially told me "I dont have access to this live data, please paste the table of the team you have from the site and I'll correct it". We eventually got there and here is the team it produced.
+    </p>
+  <table>
+    <thead>
+      <tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Club</th><th scope="col">Price</th><th scope="col">Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="pos">GK</td><td>Verbruggen</td><td>Brighton</td><td class="price">£4.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">GK</td><td>Pickford</td><td>Everton</td><td class="price">£5.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">DEF</td><td>Thomas</td><td>Coventry</td><td class="price">£4.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Van Hecke</td><td>Tottenham</td><td class="price">£5.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Mu&ntilde;oz</td><td>Crystal Palace</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">DEF</td><td>Aina</td><td>Nottm Forest</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">DEF</td><td>Greaves</td><td>Ipswich</td><td class="price">£4.0m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">MID</td><td>B. Fernandes</td><td>Man Utd</td><td class="price">£12.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Szoboszlai</td><td>Liverpool</td><td class="price">£7.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Tzolis</td><td>Arsenal</td><td class="price">£6.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Gibbs-White</td><td>Nottm Forest</td><td class="price">£8.0m</td><td>Starting</td></tr>
+      <tr><td class="pos">MID</td><td>Slater</td><td>Hull</td><td class="price">£4.5m</td><td class="bench">Bench</td></tr>
+      <tr><td class="pos">FWD</td><td>Haaland</td><td>Man City</td><td class="price">£15.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Kalimuendo</td><td>Nottm Forest</td><td class="price">£5.5m</td><td>Starting</td></tr>
+      <tr><td class="pos">FWD</td><td>Jo&atilde;o Pedro</td><td>Chelsea</td><td class="price">£7.5m</td><td class="bench">Bench</td></tr>
+    </tbody>
+  </table>
+
+  <H2>The management</H2>
+  <p>So to make sure I stay somewhat in control, I am going to be making the updates myself to each team there are no AI agents directly involved in accessing the sites. I will simply ask the same prompts which I will update in 
+    corresponding blog posts to manage the team, have it make suggestions on substitutions, transfers and boosts. Where possible I will be updating the reasoning behind each move.
+    I will also be keeping the Live Tracker (driven from a Google Sheet) updated per gameweek and making a blog post where it's changed. 
+  </p>
+  </article>
+
+  <div class="footer-nav">
+    <a href="../index.html">&larr; All posts</a>
+    <a href="../fpl_tracker_dashboard.html">Live tracker &rarr;</a>
+  </div>
+
+</div>
+</body>
+</html>

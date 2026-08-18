@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 1. Update the title below -->
+<title>Gameweek X — FPL Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch-purple:#37003c;
+    --pitch-purple-2:#4d0a56;
+    --pitch-purple-3:#5e1268;
+    --pitch-green:#00ff85;
+    --pitch-cyan:#04f5ff;
+    --ink:#f4eef7;
+    --ink-dim:#c6b3cf;
+    --ink-faint:#8d7797;
+    --line:rgba(255,255,255,0.12);
+    --danger:#ff5c72;
+    --gold:#e8c15a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--pitch-purple);
+    background-image:
+      radial-gradient(circle at 15% 0%, var(--pitch-purple-3) 0%, transparent 55%),
+      radial-gradient(circle at 100% 30%, var(--pitch-purple-2) 0%, transparent 45%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+
+  /* top nav */
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:32px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .nav-brand span{color:var(--pitch-green);}
+  .nav-right{display:flex;gap:10px;align-items:center;}
+  .nav-link{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:9px 15px;
+    border-radius:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav-link.primary{
+    color:var(--pitch-purple);
+    background:var(--pitch-green);
+  }
+  .nav-link.primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(0,255,133,0.25);
+  }
+  .nav-link.ghost{
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+  }
+  .nav-link.ghost:hover{
+    color:var(--ink);
+    border-color:rgba(255,255,255,0.3);
+  }
+  .nav-link svg{width:13px;height:13px;}
+
+  /* post meta + title */
+  .post-meta{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    margin-bottom:10px;
+  }
+  .post-meta .dot{color:var(--ink-faint);}
+  .post-meta .date{color:var(--ink-faint);text-transform:none;letter-spacing:0;font-weight:500;}
+  h1{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:32px;
+    letter-spacing:0.3px;
+    margin:0 0 22px;
+    line-height:1.15;
+  }
+  h1 span{color:var(--pitch-green);}
+
+  /* article body */
+  article{font-size:15.5px;line-height:1.7;color:var(--ink-dim);}
+  article h2{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:0.3px;
+    color:var(--ink);
+    text-transform:uppercase;
+    margin:32px 0 12px;
+  }
+  article p{margin:0 0 16px;}
+  article strong{color:var(--ink);}
+  article a{color:var(--pitch-green);}
+
+  /* stat pills — for quick GW numbers */
+  .stat-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 28px;}
+  .stat-pill{
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 16px;
+    min-width:110px;
+  }
+  .stat-pill .label{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:3px;
+  }
+  .stat-pill .value{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--pitch-green);
+  }
+
+  /* pull quote / callout for a manager's move */
+  .callout{
+    border-left:3px solid var(--pitch-green);
+    background:rgba(0,255,133,0.06);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:22px 0;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .callout .who{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .footer-nav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:44px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.3px;
+    text-transform:uppercase;
+  }
+  .footer-nav a{color:var(--ink-dim);text-decoration:none;}
+  .footer-nav a:hover{color:var(--pitch-green);}
+
+  @media (max-width:600px){
+    h1{font-size:24px;}
+    .nav-link span.label{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <a class="nav-brand" href="../index.html">FPL <span>Tracker</span></a>
+    <div class="nav-right">
+      <a class="nav-link ghost" href="../index.html"><span class="label">All posts</span></a>
+      <a class="nav-link primary" href="../fpl_tracker_dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8 12 14.7l-3.5-3.5L3 16.5"/></svg>
+        <span class="label">Live tracker</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. Update meta: gameweek number and the date you're publishing -->
+  <div class="post-meta">
+    <span>Gameweek X</span>
+    <span class="dot">&bull;</span>
+    <span class="date">Month DD, YYYY</span>
+  </div>
+
+  <!-- 3. Update the headline -->
+  <h1>Gameweek X: <span>headline goes here</span></h1>
+
+  <!-- 4. Optional: quick stat pills for the week — duplicate/remove as needed -->
+  <div class="stat-row">
+    <div class="stat-pill"><div class="label">Top scorer</div><div class="value">Team name</div></div>
+    <div class="stat-pill"><div class="label">GW points</div><div class="value">00</div></div>
+    <div class="stat-pill"><div class="label">Overall lead</div><div class="value">Team name</div></div>
+  </div>
+
+  <!-- 5. Write the post body below. Duplicate <h2>/<p> blocks as needed. -->
+  <article>
+    <p>Opening paragraph — set the scene for this gameweek. What happened across the three teams at a glance?</p>
+
+    <h2>Claude</h2>
+    <p>What Claude's team did this week: transfers, captaincy, points, reasoning behind any moves.</p>
+
+    <!-- Optional callout to highlight a notable move or quote -->
+    <div class="callout">
+      <span class="who">Claude's reasoning</span>
+      Drop in a short note on why a transfer or captain pick was made, if worth calling out.
+    </div>
+
+    <h2>ChatGPT</h2>
+    <p>What ChatGPT's team did this week.</p>
+
+    <h2>Copilot</h2>
+    <p>What Copilot's team did this week.</p>
+
+    <h2>Standings after GW X</h2>
+    <p>Wrap-up paragraph — who's leading, what's coming up next gameweek, anything to watch.</p>
+  </article>
+
+  <div class="footer-nav">
+    <a href="../index.html">&larr; All posts</a>
+    <a href="../fpl_tracker_dashboard.html">Live tracker &rarr;</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -124,6 +124,24 @@
   td.num{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;}
   .empty{color:var(--ink-faint);font-size:13px;padding:20px 0;text-align:center;}
   .pos-tag{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;color:var(--pitch-cyan);text-align:center;background:rgba(4,245,255,0.1);border-radius:6px;padding:3px 8px;display:inline-block;min-width:34px;}
+  .back-link{
+    display:inline-flex;align-items:center;gap:7px;
+    color:var(--ink-dim);text-decoration:none;
+    font-size:13px;font-weight:500;
+    padding:7px 14px 7px 11px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    background:rgba(255,255,255,0.04);
+    margin-bottom:20px;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .back-link:hover,.back-link:focus{
+    color:var(--pitch-green);
+    border-color:rgba(0,255,133,0.45);
+    background:rgba(0,255,133,0.08);
+  }
+  .back-link:focus-visible{outline:2px solid var(--pitch-green);outline-offset:2px;}
+  .back-link svg{flex-shrink:0;}
   .footer-note{color:var(--ink-faint);font-size:11.5px;text-align:center;margin-top:24px;}
   @media (max-width:720px){
     .standings{grid-template-columns:1fr;}
@@ -132,6 +150,10 @@
 </head>
 <body>
 <div class="wrap">
+  <a class="back-link" href="https://noelcoleman.github.io/multifpltracker/index.html">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    Back to the blog
+  </a>
   <h1>FPL <span>Tracker</span></h1>
   <p class="sub">Comparing 3 AI-managed Fantasy Premier League teams, gameweek by gameweek.</p>
   <p class="updated" id="updatedNote"></p>
@@ -195,7 +217,7 @@
 
 <script>
 const DATA = {"teams": ["Claude", "ChatGPT", "Copilot"], "weekly": {"Claude": [], "ChatGPT": [], "Copilot": []}, "moves": {"Claude": [], "ChatGPT": [], "Copilot": []}, "squads": {"Claude": [{"pos": "GK", "player": "Raya", "club": "Arsenal", "price": 6, "status": "Starting", "notes": ""}, {"pos": "GK", "player": "Kinsky", "club": "Tottenham", "price": 4.5, "status": "Bench", "notes": ""}, {"pos": "DEF", "player": "N. Williams", "club": "Nottm Forest", "price": 5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Van Dijk", "club": "Liverpool", "price": 6.5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Maguire", "club": "Man Utd", "price": 5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Van Ewijk", "club": "Coventry", "price": 4, "status": "Bench", "notes": ""}, {"pos": "DEF", "player": "Hume", "club": "Brighton", "price": 4.5, "status": "Bench", "notes": ""}, {"pos": "MID", "player": "Yates", "club": "Nottm Forest", "price": 4.5, "status": "Starting", "notes": "Potentially injured"}, {"pos": "MID", "player": "B. Fernandes", "club": "Man Utd", "price": 12, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Szoboszlai", "club": "Liverpool", "price": 7, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "GroB", "club": "Brighton", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Gomez", "club": "Brighton", "price": 5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 15.5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Isak", "club": "Liverpool", "price": 9, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Igor Jesus", "club": "Nottm Forest", "price": 6, "status": "Bench", "notes": ""}], "ChatGPT": [{"pos": "GK", "player": "Kinsky", "club": "Tottenham", "price": 4.5, "status": "Starting", "notes": ""}, {"pos": "GK", "player": "Dubravka", "club": "Tottenham", "price": 4, "status": "Bench", "notes": ""}, {"pos": "DEF", "player": "Gabriel", "club": "Arsenal", "price": 8, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Maguire", "club": "Man Utd", "price": 5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Mosquera", "club": "Arsenal", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Hincapie", "club": "Liverpool", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Greaves", "club": "Ipswich", "price": 4, "status": "Bench", "notes": ""}, {"pos": "MID", "player": "B. Fernandes", "club": "Man Utd", "price": 12, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Mbeumo", "club": "Man Utd", "price": 8, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Stach", "club": "Leeds", "price": 6, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Xhaka", "club": "Sunderland", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Slater", "club": "Hull", "price": 4.5, "status": "Bench", "notes": ""}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 15.5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Jo\u00e3o Pedro", "club": "Chelsea", "price": 7.5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Kusi-Asare", "club": "Fulham", "price": 4.5, "status": "Bench", "notes": ""}], "Copilot": [{"pos": "GK", "player": "Verbruggen", "club": "Brighton", "price": 4.5, "status": "Starting", "notes": ""}, {"pos": "GK", "player": "Pickford", "club": "Everton", "price": 5.5, "status": "Bench", "notes": ""}, {"pos": "DEF", "player": "Thomas", "club": "Coventry", "price": 4, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Van Hecke", "club": "Tottenham", "price": 5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Munoz", "club": "Crystal Palace", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "DEF", "player": "Aina", "club": "Nottm Forest", "price": 4.5, "status": "Bench", "notes": ""}, {"pos": "DEF", "player": "Greaves", "club": "Ipswich", "price": 4, "status": "Bench", "notes": ""}, {"pos": "MID", "player": "B. Fernandes", "club": "Man Utd", "price": 12, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Szoboszlai", "club": "Liverpool", "price": 7, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Tzolis", "club": "Arsenal", "price": 6.5, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Gibbs-White", "club": "Nottm Forest", "price": 8, "status": "Starting", "notes": ""}, {"pos": "MID", "player": "Slater", "club": "Hull", "price": 4.5, "status": "Bench", "notes": ""}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 15.5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Kalimuendo", "club": "Nottm Forest", "price": 5.5, "status": "Starting", "notes": ""}, {"pos": "FWD", "player": "Jo\u00e3o Pedro", "club": "Chelsea", "price": 7.5, "status": "Bench", "notes": ""}]}, "series": {"Claude": [], "ChatGPT": [], "Copilot": []}};
-const GENERATED_AT = "18 Aug 2026, 08:27";
+const GENERATED_AT = "18 Aug 2026, 19:14";
 const SERIES_COLORS = ['#00ff85', '#04f5ff', '#e87ba4'];
 
 let activeTeam = DATA.teams[0];

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPL 3-Team Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --pitch-purple:#37003c;
+    --pitch-purple-2:#4d0a56;
+    --pitch-purple-3:#5e1268;
+    --pitch-green:#00ff85;
+    --pitch-cyan:#04f5ff;
+    --ink:#f4eef7;
+    --ink-dim:#c6b3cf;
+    --ink-faint:#8d7797;
+    --line:rgba(255,255,255,0.12);
+    --danger:#ff5c72;
+    --gold:#e8c15a;
+    --silver:#c9c9d4;
+    --bronze:#cd8a5c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--pitch-purple);
+    background-image:
+      radial-gradient(circle at 15% 0%, var(--pitch-purple-3) 0%, transparent 55%),
+      radial-gradient(circle at 100% 30%, var(--pitch-purple-2) 0%, transparent 45%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:980px;margin:0 auto;}
+  h1{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:34px;
+    letter-spacing:0.5px;
+    margin:0;
+    text-transform:uppercase;
+  }
+  h1 span{color:var(--pitch-green);}
+  .sub{color:var(--ink-dim);font-size:14px;margin:6px 0 4px;}
+  .updated{color:var(--ink-faint);font-size:12px;margin:0 0 28px;}
+  .standings{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px;}
+  .team-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .team-card.rank-1{border-color:rgba(232,193,90,0.55);}
+  .medal{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:100px;
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .medal.p1{background:rgba(232,193,90,0.18);color:var(--gold);}
+  .medal.p2{background:rgba(201,201,212,0.16);color:var(--silver);}
+  .medal.p3{background:rgba(205,138,92,0.16);color:var(--bronze);}
+  .team-name{
+    font-family:'Rajdhani',sans-serif;font-weight:600;font-size:18px;
+    margin:0 0 8px;
+  }
+  .team-points{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;line-height:1;color:var(--pitch-green);}
+  .team-points span{font-size:13px;color:var(--ink-faint);font-weight:500;font-family:'Inter',sans-serif;margin-left:6px;}
+  .team-meta{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--ink-dim);}
+  .team-meta b{color:var(--ink);font-weight:600;display:block;font-size:14px;}
+  .chart-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:30px;
+  }
+  .chart-card h2{font-family:'Rajdhani',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 14px;color:var(--ink-dim);font-weight:600;}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--ink-dim);}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .tab-btn{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+    padding:9px 16px;
+    border-radius:100px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .tab-btn.active{background:var(--pitch-green);color:var(--pitch-purple);border-color:var(--pitch-green);font-weight:600;}
+  .panel{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:20px;
+  }
+  .panel h2{font-family:'Rajdhani',sans-serif;font-size:18px;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 16px;font-weight:600;}
+  .subtabs{display:flex;gap:6px;margin-bottom:16px;}
+  .subtab-btn{
+    background:transparent;border:none;color:var(--ink-faint);
+    padding:8px 4px;font-size:13px;font-weight:600;cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .subtab-btn.active{color:var(--ink);border-bottom-color:var(--pitch-cyan);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th{text-align:left;color:var(--ink-faint);font-weight:600;text-transform:uppercase;font-size:10.5px;letter-spacing:0.4px;padding:8px 6px;border-bottom:1px solid var(--line);}
+  td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--ink);}
+  td.num{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;}
+  .empty{color:var(--ink-faint);font-size:13px;padding:20px 0;text-align:center;}
+  .pos-tag{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;color:var(--pitch-cyan);text-align:center;background:rgba(4,245,255,0.1);border-radius:6px;padding:3px 8px;display:inline-block;min-width:34px;}
+  .footer-note{color:var(--ink-faint);font-size:11.5px;text-align:center;margin-top:24px;}
+  @media (max-width:720px){
+    .standings{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>FPL <span>Tracker</span></h1>
+  <p class="sub">Comparing 3 AI-managed Fantasy Premier League teams, gameweek by gameweek.</p>
+  <p class="updated" id="updatedNote"></p>
+
+  <div class="standings" id="standings"></div>
+
+  <div class="chart-card">
+    <h2>Cumulative points</h2>
+    <div class="legend" id="chartLegend"></div>
+    <div style="position:relative;height:260px;">
+      <canvas id="pointsChart" role="img" aria-label="Line chart of cumulative FPL points per gameweek for three teams"></canvas>
+    </div>
+  </div>
+
+  <div class="tabs" id="teamTabs"></div>
+
+  <div class="panel">
+    <div class="subtabs" id="subTabs">
+      <button class="subtab-btn active" data-sub="log">Weekly log</button>
+      <button class="subtab-btn" data-sub="squad">Squad</button>
+      <button class="subtab-btn" data-sub="moves">Moves</button>
+    </div>
+
+    <div id="logSection">
+      <h2 style="display:none;"></h2>
+      <div style="overflow-x:auto;">
+        <table id="logTable">
+          <thead>
+            <tr><th>GW</th><th>Pts</th><th>Net</th><th>Bench</th><th>Transfers</th><th>Chip</th><th>Captain</th><th>Rank</th><th>Value</th></tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="squadSection" style="display:none;">
+      <div style="overflow-x:auto;">
+        <table id="squadTable">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Club</th><th>Price</th><th>Status</th></tr>
+          </thead>
+          <tbody id="squadBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="movesSection" style="display:none;">
+      <div style="overflow-x:auto;">
+        <table id="movesTable">
+          <thead>
+            <tr><th>GW</th><th>Out</th><th>In</th><th>£ out</th><th>£ in</th><th>Cost</th><th>Reasoning</th><th>Outcome</th></tr>
+          </thead>
+          <tbody id="movesBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-note">Generated from FPL_3_Team_Tracker.xlsx — the spreadsheet is the source of truth. Re-run the generator to refresh.</p>
+</div>
+
+<script>
+const DATA = {"teams": ["Claude", "ChatGPT", "Copilot"], "weekly": {"Claude": [], "ChatGPT": [], "Copilot": []}, "moves": {"Claude": [], "ChatGPT": [], "Copilot": []}, "squads": {"Claude": [{"pos": "GK", "player": "Alisson", "club": "Liverpool", "price": 5.5, "status": "Starting"}, {"pos": "GK", "player": "Sanchez", "club": "Chelsea", "price": 4.5, "status": "Bench"}, {"pos": "DEF", "player": "Trippier", "club": "Newcastle", "price": 5.5, "status": "Starting"}, {"pos": "DEF", "player": "Gabriel", "club": "Arsenal", "price": 5, "status": "Starting"}, {"pos": "DEF", "player": "Van Dijk", "club": "Liverpool", "price": 6, "status": "Starting"}, {"pos": "DEF", "player": "Trent", "club": "Liverpool", "price": 7, "status": "Starting"}, {"pos": "DEF", "player": "Estupinan", "club": "Brighton", "price": 4.5, "status": "Bench"}, {"pos": "MID", "player": "Salah", "club": "Liverpool", "price": 13, "status": "Starting"}, {"pos": "MID", "player": "Saka", "club": "Arsenal", "price": 9, "status": "Starting"}, {"pos": "MID", "player": "Palmer", "club": "Chelsea", "price": 6.5, "status": "Starting"}, {"pos": "MID", "player": "Foden", "club": "Man City", "price": 8, "status": "Starting"}, {"pos": "MID", "player": "Gordon", "club": "Newcastle", "price": 6.5, "status": "Bench"}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 14.5, "status": "Starting"}, {"pos": "FWD", "player": "Watkins", "club": "Aston Villa", "price": 8.5, "status": "Starting"}, {"pos": "FWD", "player": "Wood", "club": "Nottm Forest", "price": 5.5, "status": "Bench"}], "ChatGPT": [{"pos": "GK", "player": "Alisson", "club": "Liverpool", "price": 5.5, "status": "Starting"}, {"pos": "GK", "player": "Sanchez", "club": "Chelsea", "price": 4.5, "status": "Bench"}, {"pos": "DEF", "player": "Trippier", "club": "Newcastle", "price": 5.5, "status": "Starting"}, {"pos": "DEF", "player": "Gabriel", "club": "Arsenal", "price": 5, "status": "Starting"}, {"pos": "DEF", "player": "Van Dijk", "club": "Liverpool", "price": 6, "status": "Starting"}, {"pos": "DEF", "player": "Trent", "club": "Liverpool", "price": 7, "status": "Starting"}, {"pos": "DEF", "player": "Estupinan", "club": "Brighton", "price": 4.5, "status": "Bench"}, {"pos": "MID", "player": "Salah", "club": "Liverpool", "price": 13, "status": "Starting"}, {"pos": "MID", "player": "Saka", "club": "Arsenal", "price": 9, "status": "Starting"}, {"pos": "MID", "player": "Palmer", "club": "Chelsea", "price": 6.5, "status": "Starting"}, {"pos": "MID", "player": "Foden", "club": "Man City", "price": 8, "status": "Starting"}, {"pos": "MID", "player": "Gordon", "club": "Newcastle", "price": 6.5, "status": "Bench"}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 14.5, "status": "Starting"}, {"pos": "FWD", "player": "Watkins", "club": "Aston Villa", "price": 8.5, "status": "Starting"}, {"pos": "FWD", "player": "Wood", "club": "Nottm Forest", "price": 5.5, "status": "Bench"}], "Copilot": [{"pos": "GK", "player": "Alisson", "club": "Liverpool", "price": 5.5, "status": "Starting"}, {"pos": "GK", "player": "Sanchez", "club": "Chelsea", "price": 4.5, "status": "Bench"}, {"pos": "DEF", "player": "Trippier", "club": "Newcastle", "price": 5.5, "status": "Starting"}, {"pos": "DEF", "player": "Gabriel", "club": "Arsenal", "price": 5, "status": "Starting"}, {"pos": "DEF", "player": "Van Dijk", "club": "Liverpool", "price": 6, "status": "Starting"}, {"pos": "DEF", "player": "Trent", "club": "Liverpool", "price": 7, "status": "Starting"}, {"pos": "DEF", "player": "Estupinan", "club": "Brighton", "price": 4.5, "status": "Bench"}, {"pos": "MID", "player": "Salah", "club": "Liverpool", "price": 13, "status": "Starting"}, {"pos": "MID", "player": "Saka", "club": "Arsenal", "price": 9, "status": "Starting"}, {"pos": "MID", "player": "Palmer", "club": "Chelsea", "price": 6.5, "status": "Starting"}, {"pos": "MID", "player": "Foden", "club": "Man City", "price": 8, "status": "Starting"}, {"pos": "MID", "player": "Gordon", "club": "Newcastle", "price": 6.5, "status": "Bench"}, {"pos": "FWD", "player": "Haaland", "club": "Man City", "price": 14.5, "status": "Starting"}, {"pos": "FWD", "player": "Watkins", "club": "Aston Villa", "price": 8.5, "status": "Starting"}, {"pos": "FWD", "player": "Wood", "club": "Nottm Forest", "price": 5.5, "status": "Bench"}]}, "series": {"Claude": [], "ChatGPT": [], "Copilot": []}};
+const GENERATED_AT = "18 Aug 2026, 07:36";
+const SERIES_COLORS = ['#00ff85', '#04f5ff', '#e87ba4'];
+
+let activeTeam = DATA.teams[0];
+let activeSub = 'log';
+let chart = null;
+
+function escapeAttr(s){
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+}
+
+function totalPoints(team){
+  return (DATA.weekly[team] || []).reduce((sum, e) => sum + (Number(e.net) || 0), 0);
+}
+
+function latestEntry(team){
+  const log = DATA.weekly[team] || [];
+  if(log.length === 0) return null;
+  return [...log].sort((a,b) => b.gw - a.gw)[0];
+}
+
+function renderStandings(){
+  const el = document.getElementById('standings');
+  const ranked = [...DATA.teams].sort((a,b) => totalPoints(b) - totalPoints(a));
+  const medalClass = ['p1','p2','p3'];
+  const medalLabel = ['1st','2nd','3rd'];
+  el.innerHTML = ranked.map((team, i) => {
+    const latest = latestEntry(team);
+    const gwCount = (DATA.weekly[team] || []).length;
+    return `
+      <div class="team-card ${i===0 ? 'rank-1' : ''}">
+        <span class="medal ${medalClass[i]}">${medalLabel[i]}</span>
+        <p class="team-name">${escapeAttr(team)}</p>
+        <div class="team-points">${totalPoints(team)}<span>total pts</span></div>
+        <div class="team-meta">
+          <div><b>${latest ? latest.points : '–'}</b>last GW</div>
+          <div><b>${latest && latest.rank ? Number(latest.rank).toLocaleString() : '–'}</b>rank</div>
+          <div><b>${gwCount}</b>GWs logged</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderChart(){
+  const ctx = document.getElementById('pointsChart');
+  const legendEl = document.getElementById('chartLegend');
+  const maxGw = Math.max(1, ...DATA.teams.flatMap(t => (DATA.series[t]||[]).map(e => e.gw)));
+  const labels = Array.from({length: maxGw}, (_, i) => i + 1);
+
+  const datasets = DATA.teams.map((team, i) => {
+    const series = DATA.series[team] || [];
+    const map = {};
+    series.forEach(s => map[s.gw] = s.total);
+    let running = null;
+    const data = labels.map(gw => {
+      if(map[gw] !== undefined) running = map[gw];
+      return running;
+    });
+    return {
+      label: team,
+      data,
+      borderColor: SERIES_COLORS[i],
+      backgroundColor: SERIES_COLORS[i],
+      borderWidth: 2,
+      pointRadius: 3,
+      tension: 0.25,
+      spanGaps: true
+    };
+  });
+
+  legendEl.innerHTML = DATA.teams.map((t,i) => `<span><span class="dot" style="background:${SERIES_COLORS[i]}"></span>${escapeAttr(t)}</span>`).join('');
+
+  if(chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type:'line',
+    data:{labels, datasets},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#c6b3cf'}, grid:{color:'rgba(255,255,255,0.06)'}},
+        y:{ticks:{color:'#c6b3cf'}, grid:{color:'rgba(255,255,255,0.06)'}}
+      }
+    }
+  });
+}
+
+function renderTabs(){
+  const el = document.getElementById('teamTabs');
+  el.innerHTML = DATA.teams.map(t => `<button class="tab-btn ${t===activeTeam?'active':''}" data-team="${escapeAttr(t)}">${escapeAttr(t)}</button>`).join('');
+  el.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTeam = btn.dataset.team;
+      renderTabs();
+      renderLog();
+      renderSquad();
+      renderMoves();
+    });
+  });
+}
+
+function renderSubTabs(){
+  document.querySelectorAll('.subtab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sub === activeSub);
+  });
+  document.getElementById('logSection').style.display = activeSub === 'log' ? 'block' : 'none';
+  document.getElementById('squadSection').style.display = activeSub === 'squad' ? 'block' : 'none';
+  document.getElementById('movesSection').style.display = activeSub === 'moves' ? 'block' : 'none';
+}
+
+function renderLog(){
+  const log = DATA.weekly[activeTeam] || [];
+  const body = document.getElementById('logBody');
+  const sorted = [...log].sort((a,b) => b.gw - a.gw);
+  if(sorted.length === 0){
+    body.innerHTML = `<tr><td colspan="9"><div class="empty">No gameweeks logged yet for this team.</div></td></tr>`;
+    return;
+  }
+  body.innerHTML = sorted.map(e => `
+    <tr>
+      <td class="num">${e.gw}</td>
+      <td class="num">${e.points ?? ''}</td>
+      <td class="num">${e.net ?? ''}</td>
+      <td>${e.bench ?? ''}</td>
+      <td>${e.transfers ?? ''}${e.cost ? ' (-'+e.cost+')' : ''}</td>
+      <td>${e.chip || '–'}</td>
+      <td>${e.captain || '–'}</td>
+      <td>${e.rank ? Number(e.rank).toLocaleString() : '–'}</td>
+      <td>${e.value ? '£'+e.value+'m' : '–'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderSquad(){
+  const squad = DATA.squads[activeTeam] || [];
+  const body = document.getElementById('squadBody');
+  if(squad.length === 0){
+    body.innerHTML = `<tr><td colspan="5"><div class="empty">No squad entered yet for this team.</div></td></tr>`;
+    return;
+  }
+  body.innerHTML = squad.map(row => `
+    <tr>
+      <td><span class="pos-tag">${row.pos}</span></td>
+      <td>${escapeAttr(row.player || '–')}</td>
+      <td>${escapeAttr(row.club || '–')}</td>
+      <td>${row.price ? '£'+row.price+'m' : '–'}</td>
+      <td>${row.status || '–'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderMoves(){
+  const list = DATA.moves[activeTeam] || [];
+  const body = document.getElementById('movesBody');
+  const sorted = [...list].sort((a,b) => (b.gw||0) - (a.gw||0));
+  if(sorted.length === 0){
+    body.innerHTML = `<tr><td colspan="8"><div class="empty">No moves logged yet for this team.</div></td></tr>`;
+    return;
+  }
+  body.innerHTML = sorted.map(m => `
+    <tr>
+      <td class="num">${m.gw ?? ''}</td>
+      <td>${escapeAttr(m.out || '–')}</td>
+      <td>${escapeAttr(m.in || '–')}</td>
+      <td>${m.priceOut ? '£'+m.priceOut+'m' : '–'}</td>
+      <td>${m.priceIn ? '£'+m.priceIn+'m' : '–'}</td>
+      <td>${m.cost || 0}</td>
+      <td>${escapeAttr(m.reason || '–')}</td>
+      <td>${escapeAttr(m.outcome || '–')}</td>
+    </tr>
+  `).join('');
+}
+
+document.querySelectorAll('.subtab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeSub = btn.dataset.sub;
+    renderSubTabs();
+  });
+});
+
+document.getElementById('updatedNote').textContent = 'Generated from spreadsheet on ' + GENERATED_AT;
+
+renderStandings();
+renderChart();
+renderTabs();
+renderSubTabs();
+renderLog();
+renderSquad();
+renderMoves();
+</script>
+</body>
+</html>

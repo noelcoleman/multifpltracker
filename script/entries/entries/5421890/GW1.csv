@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Verbruggen,Bart Verbruggen,Brighton,GKP,6,6,4.5,1,False,True,1
+Thomas,Bobby Thomas,Coventry City,DEF,3,3,4.0,2,False,False,1
+Van Hecke,Jan Paul van Hecke,Spurs,DEF,1,1,5.0,3,False,False,1
+Muñoz,Daniel Muñoz Mejía,Crystal Palace,DEF,0,0,5.5,4,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,2,2,12.0,5,False,False,1
+Szoboszlai,Dominik Szoboszlai,Liverpool,MID,8,8,7.0,6,False,False,1
+Tzolis,Christos Tzolis,Arsenal,MID,6,6,6.5,7,False,False,1
+Gibbs-White,Morgan Gibbs-White,Nott'm Forest,MID,2,2,8.0,8,False,False,1
+Kalimuendo,Arnaud Kalimuendo,Nott'm Forest,FWD,1,1,5.5,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,2,2,15.5,10,True,False,2
+João Pedro,João Pedro Junqueira de Jesus,Chelsea,FWD,11,11,7.5,11,False,False,1
+Pickford,Jordan Pickford,Everton,GKP,7,7,5.5,12,False,False,0
+Greaves,Jacob Greaves,Ipswich Town,DEF,2,2,4.0,13,False,False,0
+Slater,Regan Slater,Hull City,MID,6,6,4.5,14,False,False,0
+Aina,Ola Aina,Nott'm Forest,DEF,5,5,4.5,15,False,False,0

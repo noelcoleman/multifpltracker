@@ -143,8 +143,85 @@
   .back-link:focus-visible{outline:2px solid var(--pitch-green);outline-offset:2px;}
   .back-link svg{flex-shrink:0;}
   .footer-note{color:var(--ink-faint);font-size:11.5px;text-align:center;margin-top:24px;}
+
+  /* ---- formation / pitch view ---- */
+  .pitch-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .formation-badge{
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;
+    background:rgba(0,255,133,0.14);color:var(--pitch-green);
+    border:1px solid rgba(0,255,133,0.35);
+    border-radius:100px;padding:3px 12px;
+  }
+  .pitch-note{color:var(--ink-faint);font-size:12px;}
+  .pitch{
+    position:relative;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.14);
+    background:
+      linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0) 38%),
+      repeating-linear-gradient(180deg,#0c6b3b 0 46px,#0a5c33 46px 92px);
+    padding:20px 8px 16px;
+    overflow:hidden;
+  }
+  .pitch-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+  .pitch-rows{position:relative;display:flex;flex-direction:column;gap:12px;}
+  .pitch-row{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 2px;}
+  .bench{
+    margin-top:12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,0.04);
+    padding:12px 8px 10px;
+  }
+  .bench-label{
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--ink-faint);text-align:center;margin:0 0 8px;
+  }
+  .bench .pitch-row{gap:4px 2px;}
+  .p{width:84px;text-align:center;position:relative;}
+  .p .shirt-wrap{position:relative;width:48px;margin:0 auto 5px;}
+  .p svg.shirt{display:block;width:48px;height:48px;filter:drop-shadow(0 3px 5px rgba(0,0,0,0.45));}
+  .p .nm{
+    background:rgba(4,16,10,0.86);color:#fff;
+    font-size:10.5px;font-weight:600;line-height:1.35;
+    border-radius:4px 4px 0 0;padding:2.5px 4px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .p .val{
+    background:var(--pitch-green);color:#052a15;
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;line-height:1.35;
+    border-radius:0 0 4px 4px;padding:1.5px 4px;
+  }
+  .bench .p .val{background:rgba(255,255,255,0.75);color:#1b1020;}
+  .badge{
+    position:absolute;top:-3px;right:-2px;
+    width:18px;height:18px;border-radius:50%;
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;line-height:18px;
+    text-align:center;border:1.5px solid #06210f;
+  }
+  .badge.cap{background:#fff;color:#111;}
+  .badge.vice{background:#111;color:#fff;border-color:#fff;}
+  .flag{
+    position:absolute;top:-3px;left:-2px;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--danger);color:#2b0009;
+    font-size:11px;font-weight:700;line-height:16px;text-align:center;
+    border:1.5px solid #06210f;cursor:help;
+  }
+  .squad-list-head{
+    font-family:'Rajdhani',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:0.8px;
+    color:var(--ink-faint);font-weight:600;margin:22px 0 8px;
+  }
   @media (max-width:720px){
     .standings{grid-template-columns:1fr;}
+    .p{width:62px;}
+    .p .shirt-wrap{width:38px;}
+    .p svg.shirt{width:38px;height:38px;}
+    .p .nm{font-size:9px;padding:2px 3px;}
+    .p .val{font-size:9.5px;}
+    .pitch{background:
+      linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0) 38%),
+      repeating-linear-gradient(180deg,#0c6b3b 0 34px,#0a5c33 34px 68px);}
   }
 </style>
 </head>
@@ -190,6 +267,30 @@
     </div>
 
     <div id="squadSection" style="display:none;">
+      <div class="pitch-head">
+        <span class="formation-badge" id="formationBadge">–</span>
+        <span class="pitch-note" id="pitchNote"></span>
+      </div>
+      <div class="pitch" id="pitch">
+        <svg class="pitch-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <g fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="0.35" vector-effect="non-scaling-stroke">
+            <rect x="1" y="1" width="98" height="98" rx="1"/>
+            <line x1="1" y1="50" x2="99" y2="50"/>
+            <circle cx="50" cy="50" r="11"/>
+            <rect x="27" y="1" width="46" height="15"/>
+            <rect x="38" y="1" width="24" height="6"/>
+            <rect x="27" y="84" width="46" height="15"/>
+            <rect x="38" y="93" width="24" height="6"/>
+          </g>
+        </svg>
+        <div class="pitch-rows" id="pitchRows"></div>
+      </div>
+      <div class="bench" id="bench">
+        <p class="bench-label">Bench</p>
+        <div class="pitch-row" id="benchRow"></div>
+      </div>
+
+      <h3 class="squad-list-head">Full squad list</h3>
       <div style="overflow-x:auto;">
         <table id="squadTable">
           <thead>
@@ -354,6 +455,7 @@ function renderLog(){
 function renderSquad(){
   const squad = DATA.squads[activeTeam] || [];
   const body = document.getElementById('squadBody');
+  renderPitch();
   if(squad.length === 0){
     body.innerHTML = `<tr><td colspan="5"><div class="empty">No squad entered yet for this team.</div></td></tr>`;
     return;
@@ -367,6 +469,146 @@ function renderSquad(){
       <td>${row.status || '–'}</td>
     </tr>
   `).join('');
+}
+
+/* ---- kits: body / sleeve colours per club, drawn as inline SVG shirts ---- */
+const KITS = {
+  'arsenal':        {body:'#e3000f', sleeve:'#ffffff', trim:'#ffffff'},
+  'aston villa':    {body:'#670e36', sleeve:'#95bfe5', trim:'#95bfe5'},
+  'bournemouth':    {body:'#d71920', sleeve:'#111111', trim:'#111111', pattern:'stripes', alt:'#111111'},
+  'brentford':      {body:'#d20000', sleeve:'#ffffff', trim:'#ffffff', pattern:'stripes', alt:'#ffffff'},
+  'brighton':       {body:'#0057b8', sleeve:'#ffffff', trim:'#ffffff', pattern:'stripes', alt:'#ffffff'},
+  'burnley':        {body:'#6c1d45', sleeve:'#99d6ea', trim:'#99d6ea'},
+  'chelsea':        {body:'#034694', sleeve:'#034694', trim:'#ffffff'},
+  'coventry':       {body:'#78d2f0', sleeve:'#78d2f0', trim:'#0b2a5b'},
+  'crystal palace': {body:'#c4122e', sleeve:'#1b458f', trim:'#1b458f', pattern:'stripes', alt:'#1b458f'},
+  'everton':        {body:'#274488', sleeve:'#274488', trim:'#ffffff'},
+  'fulham':         {body:'#ffffff', sleeve:'#111111', trim:'#111111'},
+  'hull':           {body:'#f5a12d', sleeve:'#111111', trim:'#111111', pattern:'stripes', alt:'#111111'},
+  'ipswich':        {body:'#3a64a3', sleeve:'#ffffff', trim:'#ffffff'},
+  'leeds':          {body:'#ffffff', sleeve:'#ffffff', trim:'#1d428a'},
+  'leicester':      {body:'#003090', sleeve:'#003090', trim:'#fdbe11'},
+  'liverpool':      {body:'#c8102e', sleeve:'#c8102e', trim:'#ffffff'},
+  'luton':          {body:'#f78f1e', sleeve:'#11223f', trim:'#11223f'},
+  'man city':       {body:'#6cabdd', sleeve:'#6cabdd', trim:'#ffffff'},
+  'man utd':        {body:'#da291c', sleeve:'#da291c', trim:'#111111'},
+  'newcastle':      {body:'#ffffff', sleeve:'#111111', trim:'#111111', pattern:'stripes', alt:'#111111'},
+  'nottm forest':   {body:'#e53233', sleeve:'#e53233', trim:'#ffffff'},
+  'sheffield utd':  {body:'#ee2737', sleeve:'#111111', trim:'#111111', pattern:'stripes', alt:'#ffffff'},
+  'southampton':    {body:'#d71920', sleeve:'#ffffff', trim:'#ffffff', pattern:'stripes', alt:'#ffffff'},
+  'sunderland':     {body:'#eb172b', sleeve:'#ffffff', trim:'#ffffff', pattern:'stripes', alt:'#ffffff'},
+  'tottenham':      {body:'#ffffff', sleeve:'#ffffff', trim:'#132257'},
+  'west ham':       {body:'#7a263a', sleeve:'#1bb1e7', trim:'#1bb1e7'},
+  'wolves':         {body:'#fdb913', sleeve:'#111111', trim:'#111111'},
+  '_default':       {body:'#8c8fa3', sleeve:'#6d7085', trim:'#ffffff'}
+};
+const CLUB_ALIASES = {
+  'spurs':'tottenham', 'tottenham hotspur':'tottenham',
+  "nott'm forest":'nottm forest', 'nottingham forest':'nottm forest', 'forest':'nottm forest',
+  'manchester utd':'man utd', 'manchester united':'man utd', 'man united':'man utd',
+  'manchester city':'man city', 'newcastle utd':'newcastle', 'newcastle united':'newcastle',
+  'wolverhampton':'wolves', 'sheffield united':'sheffield utd',
+  'brighton & hove albion':'brighton', 'leeds utd':'leeds', 'leeds united':'leeds',
+  'west ham utd':'west ham', 'west ham united':'west ham', 'afc bournemouth':'bournemouth',
+  'ipswich town':'ipswich', 'luton town':'luton', 'hull city':'hull', 'coventry city':'coventry',
+  'leicester city':'leicester', 'norwich city':'norwich'
+};
+
+function kitFor(club){
+  let key = String(club || '').trim().toLowerCase();
+  key = CLUB_ALIASES[key] || key;
+  return KITS[key] || KITS._default;
+}
+
+let shirtSeq = 0;
+
+function shirtSvg(club, isGk){
+  const kit = kitFor(club);
+  // Keepers get a neutral kit with the club colour kept as trim, like an alternate GK strip.
+  const c = isGk
+    ? {body:'#3b4050', sleeve:'#20242f', trim:kit.body, pattern:'solid'}
+    : kit;
+  const uid = 'kit' + (++shirtSeq);
+  const bodyPath = 'M20,10 L26,10 C27.5,13.6 29.6,15.2 32,15.2 C34.4,15.2 36.5,13.6 38,10 L44,10 '
+                 + 'L45.6,24 L45.2,55.5 C45.2,56.3 44.6,57 43.8,57 L20.2,57 C19.4,57 18.8,56.3 18.8,55.5 '
+                 + 'L18.4,24 Z';
+  let stripes = '';
+  if(c.pattern === 'stripes'){
+    const w = 4.6;
+    let x = 18.4;
+    let i = 0;
+    while(x < 46){
+      if(i % 2 === 1) stripes += `<rect x="${x.toFixed(1)}" y="8" width="${w}" height="52" fill="${c.alt}"/>`;
+      x += w; i++;
+    }
+    stripes = `<g clip-path="url(#${uid})">${stripes}</g>`;
+  }
+  return `<svg class="shirt" viewBox="0 0 64 64" role="img" aria-label="${escapeAttr(club || 'Unknown')} shirt">
+    <defs><clipPath id="${uid}"><path d="${bodyPath}"/></clipPath></defs>
+    <path d="M20.5,10 L12.5,15.5 L16,27 L21.5,23.6 Z" fill="${c.sleeve}" stroke="rgba(0,0,0,0.35)" stroke-width="0.7"/>
+    <path d="M43.5,10 L51.5,15.5 L48,27 L42.5,23.6 Z" fill="${c.sleeve}" stroke="rgba(0,0,0,0.35)" stroke-width="0.7"/>
+    <path d="${bodyPath}" fill="${c.body}" stroke="rgba(0,0,0,0.35)" stroke-width="0.7"/>
+    ${stripes}
+    <path d="M26,10 C27.5,13.6 29.6,15.2 32,15.2 C34.4,15.2 36.5,13.6 38,10"
+          fill="none" stroke="${c.trim}" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function playerChip(row, captain, vice){
+  const isGk = String(row.pos || '').toUpperCase() === 'GK';
+  const name = row.player || '–';
+  let badge = '';
+  if(captain && name === captain) badge = '<span class="badge cap" title="Captain">C</span>';
+  else if(vice && name === vice) badge = '<span class="badge vice" title="Vice-captain">V</span>';
+  const flag = row.notes ? `<span class="flag" title="${escapeAttr(row.notes)}">!</span>` : '';
+  const price = row.price ? '£' + row.price + 'm' : '–';
+  return `<div class="p">
+    <div class="shirt-wrap" title="${escapeAttr(name)} — ${escapeAttr(row.club || 'Unknown club')}">
+      ${shirtSvg(row.club, isGk)}${badge}${flag}
+    </div>
+    <div class="nm">${escapeAttr(name)}</div>
+    <div class="val">${price}</div>
+  </div>`;
+}
+
+function renderPitch(){
+  const squad = DATA.squads[activeTeam] || [];
+  const rowsEl = document.getElementById('pitchRows');
+  const benchEl = document.getElementById('benchRow');
+  const badgeEl = document.getElementById('formationBadge');
+  const noteEl = document.getElementById('pitchNote');
+  const latest = latestEntry(activeTeam);
+  const captain = latest ? latest.captain : '';
+  const vice = latest ? latest.vice : '';
+
+  const isStarter = r => String(r.status || '').trim().toLowerCase().startsWith('start');
+  const byPos = p => squad.filter(r => String(r.pos || '').toUpperCase() === p);
+
+  if(squad.length === 0){
+    rowsEl.innerHTML = '<div class="empty">No squad entered yet for this team.</div>';
+    benchEl.innerHTML = '';
+    badgeEl.textContent = '–';
+    noteEl.textContent = '';
+    return;
+  }
+
+  const lines = ['GK','DEF','MID','FWD'].map(p => byPos(p).filter(isStarter));
+  const starters = lines.reduce((n, l) => n + l.length, 0);
+  badgeEl.textContent = lines.slice(1).map(l => l.length).join('-');
+  noteEl.textContent = `${starters} starters`
+    + (starters !== 11 ? ' (spreadsheet lists ' + starters + ', not 11)' : '')
+    + (captain ? ' · C: ' + captain : '')
+    + (vice ? ' · V: ' + vice : '');
+
+  rowsEl.innerHTML = lines
+    .filter(line => line.length > 0)
+    .map(line => `<div class="pitch-row">${line.map(r => playerChip(r, captain, vice)).join('')}</div>`)
+    .join('');
+
+  const bench = squad.filter(r => !isStarter(r));
+  benchEl.innerHTML = bench.length
+    ? bench.map(r => playerChip(r, captain, vice)).join('')
+    : '<div class="empty">No bench players listed.</div>';
 }
 
 function renderMoves(){

@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Raya,David Raya Martín,Arsenal,GKP,6,12,6.0,1,False,False,1
+N.Williams,Neco Williams,Nott'm Forest,DEF,6,8,5.0,2,False,False,1
+Virgil,Virgil van Dijk,Liverpool,DEF,1,3,6.5,3,False,False,1
+Maguire,Harry Maguire,Man Utd,DEF,4,5,5.0,4,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,23,25,12.0,5,False,True,1
+Szoboszlai,Dominik Szoboszlai,Liverpool,MID,4,12,7.0,6,True,False,2
+Groß,Pascal Groß,Brighton,MID,13,15,5.5,7,False,False,1
+Gomez,Diego Gómez Amarilla,Brighton,MID,5,11,5.0,8,False,False,1
+Igor Jesus,Igor Jesus Maciel da Cruz,Nott'm Forest,FWD,1,3,6.0,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,13,15,15.5,10,False,False,1
+Isak,Alexander Isak,Liverpool,FWD,8,10,9.0,11,False,False,1
+Kinsky,Antonín Kinský,Spurs,GKP,1,3,4.5,12,False,False,0
+van Ewijk,Milan van Ewijk,Coventry City,DEF,2,3,4.0,13,False,False,0
+Hume,Trai Hume,Sunderland,DEF,6,8,4.5,14,False,False,0
+Yates,Ryan Yates,Nott'm Forest,MID,0,0,4.5,15,False,False,0

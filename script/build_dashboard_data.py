@@ -18,7 +18,7 @@ import json
 import os
 import re
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 import openpyxl
 
@@ -44,7 +44,13 @@ def num(v):
 
 
 def text(v):
-    return v if v not in (None, "") else ""
+    if v in (None, ""):
+        return ""
+    if isinstance(v, datetime):
+        return v.strftime("%d %b %Y")
+    if isinstance(v, date):
+        return v.strftime("%d %b %Y")
+    return v
 
 
 def player_rows(ws):

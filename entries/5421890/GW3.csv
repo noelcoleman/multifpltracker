@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Verbruggen,Bart Verbruggen,Brighton,GKP,3,9,4.5,1,False,False,1
+Van Hecke,Jan Paul van Hecke,Spurs,DEF,8,10,4.9,2,False,False,1
+Tosin,Tosin Adarabioyo,Spurs,DEF,0,0,4.4,3,False,False,1
+Pedro Porro,Pedro Porro Sauceda,Spurs,DEF,7,8,5.5,4,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,2,27,12.0,5,False,False,1
+Szoboszlai,Dominik Szoboszlai,Liverpool,MID,3,15,7.0,6,False,False,1
+Tzolis,Christos Tzolis,Arsenal,MID,5,11,6.5,7,False,False,1
+Gibbs-White,Morgan Gibbs-White,Nott'm Forest,MID,3,18,7.9,8,False,False,1
+Kalimuendo,Arnaud Kalimuendo,Nott'm Forest,FWD,0,1,5.4,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,9,24,15.5,10,True,False,2
+João Pedro,João Pedro Junqueira de Jesus,Chelsea,FWD,1,21,7.7,11,False,True,1
+Pickford,Jordan Pickford,Everton,GKP,1,11,5.5,12,False,False,0
+Thomas,Bobby Thomas,Coventry City,DEF,4,15,4.0,13,False,False,0
+Aina,Ola Aina,Nott'm Forest,DEF,1,6,4.5,14,False,False,0
+Slater,Regan Slater,Hull City,MID,3,11,4.5,15,False,False,0

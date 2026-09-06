@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Kinsky,Antonín Kinský,Spurs,GKP,6,9,4.5,1,False,True,1
+Gabriel,Gabriel dos Santos Magalhães,Arsenal,DEF,2,15,8.0,2,False,False,1
+Maguire,Harry Maguire,Man Utd,DEF,2,7,5.0,3,False,False,1
+Mosquera,Cristhian Mosquera,Arsenal,DEF,0,12,5.5,4,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,2,27,12.0,5,False,False,1
+Mbeumo,Bryan Mbeumo,Man Utd,MID,8,21,7.9,6,False,False,1
+Stach,Anton Stach,Leeds,MID,2,19,6.0,7,False,False,1
+Slater,Regan Slater,Hull City,MID,3,11,4.5,8,False,False,1
+Calvert-Lewin,Dominic Calvert-Lewin,Leeds,FWD,1,10,6.0,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,9,24,15.5,10,True,False,2
+João Pedro,João Pedro Junqueira de Jesus,Chelsea,FWD,1,21,7.7,11,False,False,1
+Dubravka,Martin Dubravka,Spurs,GKP,0,0,4.0,12,False,False,0
+Thomas,Bobby Thomas,Coventry City,DEF,4,15,4.0,13,False,False,0
+Greaves,Jacob Greaves,Ipswich Town,DEF,1,2,4.0,14,False,False,0
+I.Sangaré,Ibrahim Sangaré,Nott'm Forest,MID,0,2,4.9,15,False,False,0

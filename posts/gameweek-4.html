@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 1. Update the title below -->
+<title>Gameweek 4 — FPL Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch-purple:#37003c;
+    --pitch-purple-2:#4d0a56;
+    --pitch-purple-3:#5e1268;
+    --pitch-green:#00ff85;
+    --pitch-cyan:#04f5ff;
+    --ink:#f4eef7;
+    --ink-dim:#c6b3cf;
+    --ink-faint:#8d7797;
+    --line:rgba(255,255,255,0.12);
+    --danger:#ff5c72;
+    --gold:#e8c15a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--pitch-purple);
+    background-image:
+      radial-gradient(circle at 15% 0%, var(--pitch-purple-3) 0%, transparent 55%),
+      radial-gradient(circle at 100% 30%, var(--pitch-purple-2) 0%, transparent 45%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+
+  /* top nav */
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:32px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .nav-brand span{color:var(--pitch-green);}
+  .nav-right{display:flex;gap:10px;align-items:center;}
+  .nav-link{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:9px 15px;
+    border-radius:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav-link.primary{
+    color:var(--pitch-purple);
+    background:var(--pitch-green);
+  }
+  .nav-link.primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(0,255,133,0.25);
+  }
+  .nav-link.ghost{
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+  }
+  .nav-link.ghost:hover{
+    color:var(--ink);
+    border-color:rgba(255,255,255,0.3);
+  }
+  .nav-link svg{width:13px;height:13px;}
+
+  /* post meta + title */
+  .post-meta{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    margin-bottom:10px;
+  }
+  .post-meta .dot{color:var(--ink-faint);}
+  .post-meta .date{color:var(--ink-faint);text-transform:none;letter-spacing:0;font-weight:500;}
+  h1{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:32px;
+    letter-spacing:0.3px;
+    margin:0 0 22px;
+    line-height:1.15;
+  }
+  h1 span{color:var(--pitch-green);}
+
+  /* article body */
+  article{font-size:15.5px;line-height:1.7;color:var(--ink-dim);}
+  article h2{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:0.3px;
+    color:var(--ink);
+    text-transform:uppercase;
+    margin:32px 0 12px;
+  }
+  article p{margin:0 0 16px;}
+  article strong{color:var(--ink);}
+  article a{color:var(--pitch-green);}
+
+  /* stat pills — for quick GW numbers */
+  .stat-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 28px;}
+  .stat-pill{
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 16px;
+    min-width:110px;
+  }
+  .stat-pill .label{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:3px;
+  }
+  .stat-pill .value{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--pitch-green);
+  }
+
+  /* pull quote / callout for a manager's move */
+  .callout{
+    border-left:3px solid var(--pitch-green);
+    background:rgba(0,255,133,0.06);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    margin:22px 0;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .callout .who{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    color:var(--pitch-cyan);
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .footer-nav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:44px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.3px;
+    text-transform:uppercase;
+  }
+  .footer-nav a{color:var(--ink-dim);text-decoration:none;}
+  .footer-nav a:hover{color:var(--pitch-green);}
+
+  @media (max-width:600px){
+    h1{font-size:24px;}
+    .nav-link span.label{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <a class="nav-brand" href="../index.html">FPL <span>Tracker</span></a>
+    <div class="nav-right">
+      <a class="nav-link ghost" href="../index.html"><span class="label">All posts</span></a>
+      <a class="nav-link primary" href="../fpl_tracker_dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8 12 14.7l-3.5-3.5L3 16.5"/></svg>
+        <span class="label">Live tracker</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. Update meta: gameweek number and the date you're publishing -->
+  <div class="post-meta">
+    <span>Gameweek 4</span>
+    <span class="dot">&bull;</span>
+    <span class="date">September 16, 2026</span>
+  </div>
+
+  <!-- 3. Update the headline -->
+  <h1>Gameweek 4: <span>Trim the dead weight</span></h1>
+
+  <!-- 4. Optional: quick stat pills for the week — duplicate/remove as needed -->
+
+  <!-- 5. Write the post body below. Duplicate <h2>/<p> blocks as needed. -->
+  <article>
+  <p>Gameweek 4 will our managers ring in the  changes? Will Claude finally make a move on transfers?</p>
+    
+    <h2>The prompt</H2>
+    <p>I gave each AI manager the same prompt again going into week 2 as I did week 1 and as I intend to for the remainder of the weeks. I  upload the relevant CSV and then give them the following prompt:</p>
+    <p><div class="callout">
+      <span class="who">prompt</span>
+This is your players points from game week X as a CSV. How would you prepare going into the next game week? </div>
+    <p>And then I track any further responses to allow the AI itself to make the decisions.</p>
+
+
+    <h2>Claude</h2>
+    <p>Claude remains second but the gap is starting to narrow considerably to just 14 points but Claude has increased it's advantage over 3rd place. This week however it identified that removing Szoboszlai (LIV) due to him not "earning" his price tag of £7.0m. It then asked if we had any additional free transfers nearly remembering that it banked them from the previous weeks, when I confirmed it had additional free transfers the next on the chopping block was van Ewijk (BRI). These players were replaced with Schade (BRE) and Mitchell (CRY) respectively. Lets see how this goes. It finally also suggested I take the armband off of Isak (LIV) in favour of Haaland (MCI) due to not having the best week during GW4. Let see if it's first dip into transfers pays off.</p>
+
+    <!-- Optional callout to highlight a notable move or quote -->
+    <!--<div class="callout">
+      <span class="who">Claude's reasoning</span>
+      Drop in a short note on why a transfer or captain pick was made, if worth calling out.
+    </div>-->
+
+    <h2>ChatGPT</h2>
+    <p>ChatGPT is still ahead but the margin is thinning to just 14 points. ChatGPT also wanted to make a singular change wanting to replace Thomas (COV) for Nico Williams (NFO) however it had to be corrected as it had an incorrect price for him putting itself 0.6m over budget, so it decided to keep Thomas for the time being as there were no changes it identified as worth the budget hit. The only other change suggested was make the vice captin Joao Pedro (CHE) instead of Kinsky (TOT) we'll see if that makes any impact. </p>
+
+    <h2>Copilot</h2>
+    <p>I have no idea what year Copilot thinks it is, but I have a good guess as it kept asking me to swap in Luton and Burnley players who were both in the Premier League 2 seasons ago. I corrected it about Luton and Burnley but it then suggested a West Ham player. When it was corrected about this it had to go off and re-clarify the teams in the Premier League and Championship just to ensure it wasn't suggesting any further players. After all that it made 2 changes, suggesting it replaced Tosin (TOT) and Porro (TOT) due their blanking and being too reliant on Tottenham players, which then made it seem bizarre that on the list of potential replacements was Udogie. Ultimately it replaced them with Dunk and Gusto after a large number of corrections about budget concerns. For an AI integrated into the Premier League it really doesn't know whats going on. Perhaps theres a reason it's being left behind?</p>
+
+
+  <H2>Updates</H2>
+  <p>So I've been posing a question, do I let the managers know they're in a league with 2 others and their relative position? Will it influence their decisions? </p>
+  </article>
+
+  <div class="footer-nav">
+    <a href="../index.html">&larr; All posts</a>
+    <a href="../fpl_tracker_dashboard.html">Live tracker &rarr;</a>
+  </div>
+
+</div>
+</body>
+</html>

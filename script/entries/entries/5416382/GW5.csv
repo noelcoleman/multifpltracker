@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Kinsky,Antonín Kinský,Spurs,GKP,2,18,4.5,1,False,False,1
+Gabriel,Gabriel dos Santos Magalhães,Arsenal,DEF,1,25,8.0,2,False,False,1
+Hall,Lewis Hall,Newcastle,DEF,13,31,5.3,3,False,False,1
+Thomas,Bobby Thomas,Coventry City,DEF,9,24,4.0,4,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,2,31,11.9,5,False,False,1
+Mbeumo,Bryan Mbeumo,Man Utd,MID,2,25,7.9,6,False,False,1
+Stach,Anton Stach,Leeds,MID,5,27,6.0,7,False,False,1
+Slater,Regan Slater,Hull City,MID,2,15,4.5,8,False,False,1
+I.Sangaré,Ibrahim Sangaré,Nott'm Forest,MID,1,4,4.8,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,6,39,15.6,10,True,False,2
+Calvert-Lewin,Dominic Calvert-Lewin,Leeds,FWD,2,22,6.0,11,False,False,1
+Dubravka,Martin Dubravka,Spurs,GKP,0,0,4.0,12,False,False,0
+Mosquera,Cristhian Mosquera,Arsenal,DEF,0,12,5.3,13,False,False,0
+Greaves,Jacob Greaves,Ipswich Town,DEF,0,3,3.9,14,False,False,0
+João Pedro,João Pedro Junqueira de Jesus,Chelsea,FWD,0,33,7.7,15,False,True,0

@@ -1,0 +1,16 @@
+web_name,player,team,position,gw_points,total_points,now_cost_m,squad_position,is_captain,is_vice_captain,multiplier
+Raya,David Raya Martín,Arsenal,GKP,3,33,6.1,1,False,False,1
+N.Williams,Neco Williams,Nott'm Forest,DEF,1,20,5.0,2,False,False,1
+Virgil,Virgil van Dijk,Liverpool,DEF,0,25,6.5,3,False,False,1
+Mitchell,Tyrick Mitchell,Crystal Palace,DEF,4,28,4.5,4,False,False,1
+Hume,Trai Hume,Sunderland,DEF,1,11,4.3,5,False,False,1
+B.Fernandes,Bruno Borges Fernandes,Man Utd,MID,1,32,11.9,6,True,False,2
+Schade,Kevin Schade,Brentford,MID,1,40,6.2,7,False,False,1
+Groß,Pascal Groß,Brighton,MID,6,53,6.0,8,False,False,1
+Gomez,Diego Gómez Amarilla,Brighton,MID,5,29,5.0,9,False,False,1
+Haaland,Erling Haaland,Man City,FWD,6,45,15.6,10,False,True,1
+Gonzalo,Gonzalo García,Fulham,FWD,2,16,6.1,11,False,False,1
+Kinsky,Antonín Kinský,Spurs,GKP,3,21,4.5,12,False,False,0
+Isak,Alexander Isak,Liverpool,FWD,0,33,9.0,13,False,False,0
+Maguire,Harry Maguire,Man Utd,DEF,2,12,4.8,14,False,False,0
+Yates,Ryan Yates,Nott'm Forest,MID,0,0,4.4,15,False,False,0
